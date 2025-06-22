@@ -1,0 +1,6 @@
+<h2>Anime Genres</h2>
+<div *ngIf="animeData$ | async">
+  <div *ngFor="let anime of animeData$ | async">
+    <img [src]="anime.icon">
+  </div>
+</div>
