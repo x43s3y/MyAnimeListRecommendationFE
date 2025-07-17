@@ -1,13 +1,6 @@
-// export interface UserAnime {
-//     title: string
-//     mean: number
-//     genres: string[]
-//     icon: string
-// }
+import { Genres } from "./genre"
 
-import { Genres } from "./genre.interface"
-
-export class UserAnime {
+export class Anime {
     public title: string
     public mean: number
     public genre_list: Genres[]
