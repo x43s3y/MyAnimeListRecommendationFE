@@ -12,7 +12,7 @@ export class AnimeService {
   private apiUrl = 'http://localhost:8000/'; // Main URL
   private apiUrlAllAnime = `${this.apiUrl}all-anime`; // ← Python Local FastAPI url for user animes
   private apiUrlUser = `${this.apiUrl}user-anime`; // ← Python Local FastAPI url for user animes
-  private apiUrlUserGenres = `${this.apiUrl}user-anime-genres`; // ← Python Local FastAPI url for user animes
+  private apiUrlUserGenres = `${this.apiUrl}user-anime-genres/`; // ← Python Local FastAPI url for user animes
 
   constructor(private http: HttpClient) {}
 
@@ -26,8 +26,8 @@ export class AnimeService {
     return animes
   }
   
-  getUserWatchedGenres(): Observable<Map<string, number>> {
-    const genres = this.http.get<Map<string, number>>(this.apiUrlUserGenres);
+  getUserWatchedGenres(userName: string): Observable<Map<string, number>> {
+    const genres = this.http.get<Map<string, number>>(`${this.apiUrlUserGenres}?nickname=${userName}`);
     return genres
   }
 }
