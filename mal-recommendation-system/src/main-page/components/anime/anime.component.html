@@ -1,7 +1,11 @@
 <div class="anime-generator-container">
   <h2>Random Anime Generator</h2>
 
-  <button class="generate-btn" (click)="generateRandomAnime(filteredAnimeData$)">
+  <div class="nickname-field">
+    <input id="nickname" #nickname placeholder="Enter your nickname">
+  </div>
+
+  <button class="generate-btn" (click)="generateRandomAnime(animeData$)">
     🎲 Generate
   </button>
 

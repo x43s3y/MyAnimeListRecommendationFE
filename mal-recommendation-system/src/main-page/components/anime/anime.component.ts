@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AnimeService } from '../../services/anime.service';
 import { Anime } from '../../../types/anime'
 import { combineLatest, map, Observable } from 'rxjs';
@@ -11,6 +11,8 @@ import { Genres } from '../../../types/genre';
   styleUrl: './anime.component.scss'
 })
 export class AnimeComponent {
+    @ViewChild('nickname') nicknameInputEl: ElementRef | undefined
+
     animeData$!: Observable<Anime[]>;
     filteredAnimeData$!: Observable<Anime[]>;
     genresData$!: Observable<Map<string, number>>;
@@ -22,10 +24,6 @@ export class AnimeComponent {
     constructor(private animeService: AnimeService) {}
 
     ngOnInit() {
-        this.genresData$ = this.animeService.getUserWatchedGenres()
-
-        this.userTopGenres$ = this.extractTopUserGenres(this.genresData$)
-
         this.animeData$ = this.animeService.getAnimes().pipe(
             map(response => response.map(anime => {
                 return new Anime(
@@ -36,8 +34,6 @@ export class AnimeComponent {
                 )}
             ))
         )
-
-        this.filteredAnimeData$ = this.filterAnimeOnGenres(this.animeData$, this.userTopGenres$)
     }
 
     private filterAnimeOnGenres(animes$: Observable<Anime[]>, genres$: Observable<Map<string, number>>) {
@@ -51,7 +47,12 @@ export class AnimeComponent {
     }
 
     public generateRandomAnime(animes$: Observable<Anime[]>) {
-        this.randomAnime$ = animes$.pipe(
+        const userName = this.nicknameInputEl?.nativeElement.value
+        this.genresData$ = this.animeService.getUserWatchedGenres(userName)
+        this.userTopGenres$ = this.extractTopUserGenres(this.genresData$)
+        this.filteredAnimeData$ = this.filterAnimeOnGenres(animes$, this.userTopGenres$)
+
+        this.randomAnime$ = this.filteredAnimeData$.pipe(
             map(animes => {
                 const randomIndex = Math.floor(Math.random() * animes.length)
                 return animes[randomIndex]
